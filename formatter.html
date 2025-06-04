@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <script>
+      window.addEventListener('message', function(event) {
+        let input = event.data;
+        let num = parseFloat(input);
+        if (!isNaN(num)) {
+          let formatted = num.toLocaleString('en-US');
+          window.ReactNativeWebView.postMessage(formatted);
+        } else {
+          window.ReactNativeWebView.postMessage("Invalid number");
+        }
+      });
+    </script>
+  </body>
+</html>
