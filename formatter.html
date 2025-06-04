@@ -1,17 +1,38 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <script>
-      window.addEventListener('message', function(event) {
-        let input = event.data;
-        let num = parseFloat(input);
-        if (!isNaN(num)) {
-          let formatted = num.toLocaleString('en-US');
-          window.ReactNativeWebView.postMessage(formatted);
-        } else {
-          window.ReactNativeWebView.postMessage("Invalid number");
-        }
-      });
-    </script>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Number Formatter</title>
+</head>
+<body>
+  <h2 id="output">در حال پردازش...</h2>
+
+  <script>
+    // تابع فرمت کردن عدد
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // گرفتن عدد از URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const numberParam = urlParams.get("number");
+
+    let output = "";
+
+    if (numberParam && !isNaN(numberParam)) {
+      const formatted = formatNumber(numberParam);
+      output = formatted;
+    } else {
+      output = "عدد نامعتبر است.";
+    }
+
+    // نمایش روی صفحه
+    document.getElementById("output").innerText = output;
+
+    // ارسال به Thunkable
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(output);
+    }
+  </script>
+</body>
 </html>
